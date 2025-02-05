@@ -197,7 +197,7 @@ class TaskManager:
         return
 
 
-        # Zaspisywanie listy z taskami do pliku json
+    # Zaspisywanie listy z taskami do pliku json
     def save_tasks(self):
         with open(self.filename, 'w') as f:
             json.dump([task.to_dict() for task in self.tasks], f, indent=4)
