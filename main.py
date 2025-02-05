@@ -62,6 +62,9 @@ class TaskManager:
             if task.title == title:
                 self.tasks.remove(task)
                 print(f'Task deleted: {title}')
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     # Edycja poszczególnych pól tasków (5 metod):
     def mark_task_done(self, title):
@@ -69,27 +72,42 @@ class TaskManager:
             if task.title == title:
                 task.mark_as_done()
                 print(f'Task completed: {title}')
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     def mark_task_unfinished(self, title):
         for task in self.tasks:
             if task.title == title:
                 task.mark_as_unfinished()
                 print(f'Task unfinished: {title}')
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     def edit_task_title(self, title, new_title):
         for task in self.tasks:
             if task.title == title:
                 task.edit_title(new_title)
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     def edit_task_description(self, title, new_description):
         for task in self.tasks:
             if task.title == title:
                 task.edit_description(new_description)
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     def edit_task_priority(self, title, new_priority):
         for task in self.tasks:
             if task.title == title:
                 task.edit_priority(new_priority)
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
     # Wypisywanie zawartości tasków (3 metody):
     def print_task(self, task):
@@ -108,6 +126,7 @@ class TaskManager:
               f'Deadline: {task.deadline} \n'
               f'Date of execution: {task.done_time} \n'
               f'-------------------------------\n')
+        return
 
     def show_tasks_by_status(self, filter_by='all'):
         to_show = []
@@ -124,7 +143,9 @@ class TaskManager:
             for task in to_show:
                 self.print_task(task)
         else:
-            print('Not found')
+            print('\033[91mTasks Not found\033[0m')
+
+        return
 
 
     def show_tasks_by_priority(self, filter_by='all'):
@@ -142,8 +163,7 @@ class TaskManager:
             for task in to_show:
                 self.print_task(task)
         else:
-            print('Not found')
-
+            print('\033[91mTasks Not found\033[0m')
 
     # Sprawdza czy dalej jest czas na wykonanie zadania:
     def is_deadline(self, title):
@@ -172,8 +192,12 @@ class TaskManager:
                               f'Title: {task.title} \n'
                               f"Deadline: {deadline.strftime('%d-%m-%Y %H:%M:%S')} \n"
                               f'Date of execution: {task.done_time} \n')
+                return
+        print('\033[91mTask not found\033[0m')
+        return
 
-    # Zaspisywanie listy z taskami do pliku json
+
+        # Zaspisywanie listy z taskami do pliku json
     def save_tasks(self):
         with open(self.filename, 'w') as f:
             json.dump([task.to_dict() for task in self.tasks], f, indent=4)
@@ -212,7 +236,12 @@ if __name__ == '__main__':
             case 1:
                 title = input('Enter the title of the task: ')
                 description = input('Enter the description of the task: ')
-                priority = input('Enter the priority of the task (preferred: 1-3): ')
+                while True:
+                    priority = input('Enter the priority of the task (preferred: 1-3): ')
+                    if priority in ['1', '2', '3']:
+                        break
+                    else:
+                        print('Invalid priority! Please enter 1, 2, or 3.')
 
                 task = Task(title,description,priority)
                 manager.add_task(task)
@@ -261,7 +290,12 @@ if __name__ == '__main__':
 
                         case 5:
                             title = input('Enter the title of the task: ')
-                            new_priority = input('Enter the new priority of the task: ')
+                            while True:
+                                new_priority = input('Enter the new priority of the task (preferred: 1-3): ')
+                                if new_priority in ['1', '2', '3']:
+                                    break
+                                else:
+                                    print('Invalid priority! Please enter 1, 2, or 3.')
 
                             manager.edit_task_priority(title, new_priority)
                         case 6:
